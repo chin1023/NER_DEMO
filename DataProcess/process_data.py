@@ -1,5 +1,5 @@
 from DataProcess.vocab import *
-from Public.path import path_data_dir, path_data2_dir, path_msra_dir, path_renmin_dir
+from Public.path import path_data_dir, path_data2_dir, path_msra_dir, path_renmin_dir, path_data3_dir
 import numpy as np
 import os
 
@@ -11,7 +11,7 @@ from DataProcess.renminribao_preprocessing import renminribao_preprocessing
 class DataProcess(object):
     def __init__(self,
                  max_len=100,
-                 data_type='data',  # 'data', 'data2', 'msra', 'renmin'
+                 data_type='data3',  # 'data', 'data2', 'msra', 'renmin'
                  model='other',  # 'other'、'bert' bert 数据处理需要单独进行处理
                  ):
         """
@@ -35,9 +35,11 @@ class DataProcess(object):
 
         if data_type == 'data':
             self.base_dir = path_data_dir
-        elif data_type == 'data2':
-            self.base_dir = path_data2_dir
-            data2_preprocessing()
+        elif data_type == 'data3':
+            self.base_dir = path_data3_dir    
+        # elif data_type == 'data2':
+        #     self.base_dir = path_data2_dir
+        #     data2_preprocessing()
         elif data_type == 'msra':
             self.base_dir = path_msra_dir
             msra_preprocessing()
@@ -45,7 +47,7 @@ class DataProcess(object):
             self.base_dir = path_renmin_dir
             renminribao_preprocessing()
         else:
-            raise RuntimeError('type must be "data", "msra", "renmin" or "data2"')
+            raise RuntimeError('type must be "data", "msra", "renmin" or "data3"')
 
     def get_data(self, one_hot: bool = True) -> ([], [], [], []):
         """
@@ -170,25 +172,25 @@ class DataProcess(object):
 
 if __name__ == '__main__':
 
-    # dp = DataProcess(data_type='data')
-    # x_train, y_train, x_test, y_test = dp.get_data(one_hot=True)
-    # print(x_train.shape)
-    # print(y_train.shape)
-    # print(x_test.shape)
-    # print(y_test.shape)
-    #
-    # print(y_train[:1, :1, :100])
-
-    dp = DataProcess(data_type='data', model='bert')
+    dp = DataProcess(data_type='data3')
     x_train, y_train, x_test, y_test = dp.get_data(one_hot=True)
-    print(x_train[0].shape)
-    print(x_train[1].shape)
+    print(x_train.shape)
     print(y_train.shape)
-    print(x_test[0].shape)
-    print(x_test[1].shape)
+    print(x_test.shape)
     print(y_test.shape)
-
+    
     print(y_train[:1, :1, :100])
+
+    # dp = DataProcess(data_type='data', model='bert')
+    # x_train, y_train, x_test, y_test = dp.get_data(one_hot=True)
+    # print(x_train[0].shape)
+    # print(x_train[1].shape)
+    # print(y_train.shape)
+    # print(x_test[0].shape)
+    # print(x_test[1].shape)
+    # print(y_test.shape)
+
+    # print(y_train[:1, :1, :100])
 
     pass
 

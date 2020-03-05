@@ -10,6 +10,7 @@ path_data_dir = os.path.join(current_dir, '../data/data/')
 path_data2_dir = os.path.join(current_dir, '../data/data2/')
 path_msra_dir = os.path.join(current_dir, '../data/MSRA/')
 path_renmin_dir = os.path.join(current_dir, '../data/renMinRiBao/')
+path_data3_dir = os.path.join(current_dir, '../data/data3/')
 
 # bert 预训练文件地址
 path_bert_dir = os.path.join(current_dir, '../data/chinese_L-12_H-768_A-12/')

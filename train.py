@@ -15,10 +15,10 @@ from DataProcess.process_data import DataProcess
 max_len = 100
 
 
-def train_sample(train_model='BERTBILSTMCRF',
+def train_sample(train_model='IDCNNCRF2',
                  # ['BERTBILSTMCRF', 'BILSTMAttentionCRF', 'BILSTMCRF',
                  # 'IDCNNCRF', 'IDCNNCRF2']
-                 epochs=15,
+                 epochs=3,
                  log = None,
                  ):
 
@@ -26,7 +26,7 @@ def train_sample(train_model='BERTBILSTMCRF',
     if train_model == 'BERTBILSTMCRF':
         dp = DataProcess(data_type='msra', max_len=max_len, model='bert')
     else:
-        dp = DataProcess(data_type='msra', max_len=max_len)
+        dp = DataProcess(data_type='data3', max_len=max_len)
     train_data, train_label, test_data, test_label = dp.get_data(one_hot=True)
 
     log.info("----------------------------数据信息 START--------------------------")
@@ -87,7 +87,9 @@ def train_sample(train_model='BERTBILSTMCRF',
 if __name__ == '__main__':
 
     # 需要测试的模型
-    train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF', 'BERTBILSTMCRF']
+    # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF', 'BERTBILSTMCRF']
+    # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF']
+    train_modes = ['IDCNNCRF2']
 
     # 定义文件路径（以便记录数据）
     log_path = os.path.join(path_log_dir, 'train_log.log')
@@ -98,7 +100,7 @@ if __name__ == '__main__':
     columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'f1', 'recall']
     df = pd.DataFrame(columns=columns)
     for model in train_modes:
-        info_list = train_sample(train_model=model, epochs=15, log=log)
+        info_list = train_sample(train_model=model, epochs=1, log=log)
         for info in info_list:
             df = df.append([info])
         df.to_csv(df_path)
