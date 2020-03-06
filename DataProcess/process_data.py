@@ -98,10 +98,12 @@ class DataProcess(object):
         with open(file_path, 'r') as f:
             line_data,  line_label = [], []
             for line in f:
+                # print('line', line)
                 if line != '\n':
                     w, t = line.split()
                     char_index = self.w2i.get(w, self.w2i[self.unk_flag])
                     tag_index = self.tag2index.get(t, 0)
+                    # print('tag_index', tag_index)
                     line_data.append(char_index)
                     line_label.append(tag_index)
                 else:
@@ -115,6 +117,8 @@ class DataProcess(object):
                     data.append(line_data)
                     label.append(line_label)
                     line_data, line_label = [], []
+                # print('line_data', line_data)
+                # print('line_label', line_label)
         return np.array(data), np.array(label)
 
     def __bert_text_to_index(self, file_path: str):
