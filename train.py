@@ -37,6 +37,9 @@ def train_sample(train_model='IDCNNCRF2',
     log.info(f"test_label:{test_label.shape}")
     log.info("----------------------------数据信息 END--------------------------")
 
+
+    print('-------------------------training------------------------------------')
+
     if train_model == 'BERTBILSTMCRF':
         model_class = BERTBILSTMCRF(dp.vocab_size, dp.tag_size, max_len=max_len)
     elif train_model == 'BILSTMAttentionCRF':
@@ -46,7 +49,8 @@ def train_sample(train_model='IDCNNCRF2',
     elif train_model == 'IDCNNCRF':
         model_class = IDCNNCRF(dp.vocab_size, dp.tag_size, max_len=max_len)
     else:
-        model_class = IDCNNCRF2(dp.vocab_size, dp.tag_size, max_len=max_len)
+        print("123")
+        model_class = IDCNNCRF2(dp.vocab_size, dp.tag_size, max_len=max_len)   #dp.tag_size=19
 
     model = model_class.creat_model()
 
@@ -100,7 +104,7 @@ if __name__ == '__main__':
     columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'f1', 'recall']
     df = pd.DataFrame(columns=columns)
     for model in train_modes:
-        info_list = train_sample(train_model=model, epochs=1, log=log)
+        info_list = train_sample(train_model=model, epochs=15, log=log)
         for info in info_list:
             df = df.append([info])
         df.to_csv(df_path)
