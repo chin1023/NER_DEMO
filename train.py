@@ -9,16 +9,17 @@ import numpy as np
 import pandas as pd
 
 from Public.utils import *
+from Public.path import path_model
 from keras.callbacks import EarlyStopping
 from DataProcess.process_data import DataProcess
 
-max_len = 100
+max_len = 200
 
 
 def train_sample(train_model='IDCNNCRF2',
                  # ['BERTBILSTMCRF', 'BILSTMAttentionCRF', 'BILSTMCRF',
                  # 'IDCNNCRF', 'IDCNNCRF2']
-                 epochs=3,
+                 epochs=30,
                  log = None,
                  ):
 
@@ -55,20 +56,25 @@ def train_sample(train_model='IDCNNCRF2',
     model = model_class.creat_model()
 
     callback = TrainHistory(log=log, model_name=train_model)  # 自定义回调 记录训练数据
-    early_stopping = EarlyStopping(monitor='val_crf_viterbi_accuracy', patience=2, mode='max')  # 提前结束
-    model.fit(train_data, train_label, batch_size=32, epochs=epochs,
+    early_stopping = EarlyStopping(monitor='val_crf_viterbi_accuracy', patience=30, mode='max')  # 提前结束
+    model.fit(train_data, train_label, batch_size=128, epochs=epochs,
               validation_data=[test_data, test_label],
               callbacks=[callback, early_stopping])
 
-    # 计算 f1 和 recall值
+    # # save model
+    # model.save(os.path.join(path_model, 'IDCNN2.h5'))
 
+    # 计算 f1 和 recall值
     pre = model.predict(test_data)
     pre = np.array(pre)
     test_label = np.array(test_label)
     pre = np.argmax(pre, axis=2)
     test_label = np.argmax(test_label, axis=2)
+    # print('test_label', test_label)
     pre = pre.reshape(pre.shape[0] * pre.shape[1], )
     test_label = test_label.reshape(test_label.shape[0] * test_label.shape[1], )
+    # print('test_label', test_label)
+
 
     f1score = f1_score(pre, test_label, average='macro')
     recall = recall_score(pre, test_label, average='macro')
@@ -77,6 +83,7 @@ def train_sample(train_model='IDCNNCRF2',
     log.info(f"--------------:f1: {f1score} --------------")
     log.info(f"--------------:recall: {recall} --------------")
     log.info("================================================")
+
 
     # 把 f1 和 recall 添加到最后一个记录数据里面
     info_list = callback.info
@@ -104,8 +111,7 @@ if __name__ == '__main__':
     columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'f1', 'recall']
     df = pd.DataFrame(columns=columns)
     for model in train_modes:
-        info_list = train_sample(train_model=model, epochs=15, log=log)
+        info_list = train_sample(train_model=model, epochs=60, log=log)
         for info in info_list:
             df = df.append([info])
         df.to_csv(df_path)
-
