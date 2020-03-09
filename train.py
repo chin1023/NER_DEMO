@@ -27,7 +27,7 @@ def train_sample(train_model='IDCNNCRF2',
     if train_model == 'BERTBILSTMCRF':
         dp = DataProcess(data_type='msra', max_len=max_len, model='bert')
     else:
-        dp = DataProcess(data_type='data3', max_len=max_len)
+        dp = DataProcess(data_type='data600', max_len=max_len)
     train_data, train_label, test_data, test_label = dp.get_data(one_hot=True)
 
     log.info("----------------------------数据信息 START--------------------------")
@@ -50,14 +50,13 @@ def train_sample(train_model='IDCNNCRF2',
     elif train_model == 'IDCNNCRF':
         model_class = IDCNNCRF(dp.vocab_size, dp.tag_size, max_len=max_len)
     else:
-        print("123")
         model_class = IDCNNCRF2(dp.vocab_size, dp.tag_size, max_len=max_len)   #dp.tag_size=19
 
     model = model_class.creat_model()
 
     callback = TrainHistory(log=log, model_name=train_model)  # 自定义回调 记录训练数据
-    early_stopping = EarlyStopping(monitor='val_crf_viterbi_accuracy', patience=30, mode='max')  # 提前结束
-    model.fit(train_data, train_label, batch_size=128, epochs=epochs,
+    early_stopping = EarlyStopping(monitor='val_crf_viterbi_accuracy', patience=60, mode='max')  # 提前结束
+    model.fit(train_data, train_label, batch_size=64, epochs=epochs,
               validation_data=[test_data, test_label],
               callbacks=[callback, early_stopping])
 
@@ -78,6 +77,8 @@ def train_sample(train_model='IDCNNCRF2',
 
     f1score = f1_score(pre, test_label, average='macro')
     recall = recall_score(pre, test_label, average='macro')
+    print('f1score', f1score)
+    print('recall', recall)
 
     log.info("================================================")
     log.info(f"--------------:f1: {f1score} --------------")
@@ -99,8 +100,8 @@ if __name__ == '__main__':
 
     # 需要测试的模型
     # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF', 'BERTBILSTMCRF']
-    # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF']
-    train_modes = ['IDCNNCRF2']
+    train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF']
+    # train_modes = ['IDCNNCRF2']
 
     # 定义文件路径（以便记录数据）
     log_path = os.path.join(path_log_dir, 'train_log.log')
