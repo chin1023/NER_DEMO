@@ -14,7 +14,7 @@ from keras.callbacks import EarlyStopping
 from DataProcess.process_data import DataProcess
 
 max_len = 200
-
+batch_size = 128
 
 def train_sample(train_model='IDCNNCRF2',
                  # ['BERTBILSTMCRF', 'BILSTMAttentionCRF', 'BILSTMCRF',
@@ -54,10 +54,10 @@ def train_sample(train_model='IDCNNCRF2',
 
     model = model_class.creat_model()
     callback = TrainHistory(log=log, model_name=train_model)  # 自定义回调 记录训练数据
-    model.fit(train_data, train_label, batch_size=64, epochs=epochs,
+    model.fit(train_data, train_label, batch_size=batch_size, epochs=epochs,
                verbose=1, validation_split=0.1, callbacks=[callback])
 
-    score = model.evaluate(test_data, test_label, batch_size=64)
+    score = model.evaluate(test_data, test_label, batch_size=batch_size)
     print(model.metrics_names)
     print(score)
 
