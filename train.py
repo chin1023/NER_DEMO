@@ -53,12 +53,10 @@ def train_sample(train_model='IDCNNCRF2',
         model_class = IDCNNCRF2(dp.vocab_size, dp.tag_size, max_len=max_len)   #dp.tag_size=19
 
     model = model_class.creat_model()
-
     callback = TrainHistory(log=log, model_name=train_model)  # 自定义回调 记录训练数据
-    early_stopping = EarlyStopping(monitor='val_crf_viterbi_accuracy', patience=60, mode='max')  # 提前结束
     model.fit(train_data, train_label, batch_size=64, epochs=epochs,
-              validation_data=[test_data, test_label],
-              callbacks=[callback, early_stopping])
+               verbose=1, validation_split=0.1, callbacks=[callback])
+
     score = model.evaluate(test_data, test_label, batch_size=64)
     print(model.metrics_names)
     print(score)
@@ -80,8 +78,6 @@ def train_sample(train_model='IDCNNCRF2',
 
     f1score = f1_score(pre, test_label, average='macro')
     recall = recall_score(pre, test_label, average='macro')
-    print('f1score', f1score)
-    print('recall', recall)
 
     log.info("================================================")
     log.info(f"--------------:f1: {f1score} --------------")
@@ -89,12 +85,12 @@ def train_sample(train_model='IDCNNCRF2',
     log.info("================================================")
 
 
-    # 把 f1 和 recall 添加到最后一个记录数据里面
+    #把 f1 和 recall 添加到最后一个记录数据里面
     info_list = callback.info
     if info_list and len(info_list)>0:
         last_info = info_list[-1]
-        last_info['f1'] = f1score
-        last_info['recall'] = recall
+        last_info['test_loss'] = score[0]
+        last_info['test_acc'] = score[1]
 
     return info_list
 
@@ -112,10 +108,10 @@ if __name__ == '__main__':
     log = create_log(log_path)
 
     # 训练同时记录数据写入的df文件中
-    columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'f1', 'recall']
+    columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'test_loss', 'test_acc']
     df = pd.DataFrame(columns=columns)
     for model in train_modes:
         info_list = train_sample(train_model=model, epochs=100, log=log)
-        for info in info_list:
+        for info in info_list:      
             df = df.append([info])
         df.to_csv(df_path)
