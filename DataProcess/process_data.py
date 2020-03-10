@@ -1,5 +1,5 @@
 from DataProcess.vocab import *
-from Public.path import path_data_dir, path_data2_dir, path_msra_dir, path_renmin_dir, path_data3_dir
+from Public.path import path_data_dir, path_data2_dir, path_msra_dir, path_renmin_dir, path_data300_dir, path_data600_dir
 import numpy as np
 import os
 
@@ -35,8 +35,10 @@ class DataProcess(object):
 
         if data_type == 'data':
             self.base_dir = path_data_dir
-        elif data_type == 'data3':
-            self.base_dir = path_data3_dir    
+        elif data_type == 'data300':
+            self.base_dir = path_data300_dir 
+        elif data_type == 'data600':
+            self.base_dir = path_data600_dir   
         # elif data_type == 'data2':
         #     self.base_dir = path_data2_dir
         #     data2_preprocessing()

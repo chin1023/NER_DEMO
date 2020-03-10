@@ -59,6 +59,9 @@ def train_sample(train_model='IDCNNCRF2',
     model.fit(train_data, train_label, batch_size=64, epochs=epochs,
               validation_data=[test_data, test_label],
               callbacks=[callback, early_stopping])
+    score = model.evaluate(test_data, test_label, batch_size=64)
+    print(model.metrics_names)
+    print(score)
 
     # # save model
     # model.save(os.path.join(path_model, 'IDCNN2.h5'))
@@ -100,8 +103,8 @@ if __name__ == '__main__':
 
     # 需要测试的模型
     # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF', 'BERTBILSTMCRF']
-    train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF']
-    # train_modes = ['IDCNNCRF2']
+    # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF']
+    train_modes = ['IDCNNCRF', 'IDCNNCRF2']
 
     # 定义文件路径（以便记录数据）
     log_path = os.path.join(path_log_dir, 'train_log.log')
@@ -112,7 +115,7 @@ if __name__ == '__main__':
     columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'f1', 'recall']
     df = pd.DataFrame(columns=columns)
     for model in train_modes:
-        info_list = train_sample(train_model=model, epochs=60, log=log)
+        info_list = train_sample(train_model=model, epochs=100, log=log)
         for info in info_list:
             df = df.append([info])
         df.to_csv(df_path)
