@@ -27,14 +27,14 @@ def train_sample(train_model='IDCNNCRF2',
     if train_model == 'BERTBILSTMCRF':
         dp = DataProcess(data_type='msra', max_len=max_len, model='bert')
     else:
-        dp = DataProcess(data_type='data600', max_len=max_len)
+        dp = DataProcess(data_type='data300_bioes', max_len=max_len)
     train_data, train_label, test_data, test_label = dp.get_data(one_hot=True)
 
     log.info("----------------------------数据信息 START--------------------------")
-    log.info(f"当前使用数据集 MSRA")
-    # log.info(f"train_data:{train_data.shape}")
+    # log.info(f"当前使用数据集 MSRA")
+    log.info(f"train_data:{train_data.shape}")
     log.info(f"train_label:{train_label.shape}")
-    # log.info(f"test_data:{test_data.shape}")
+    log.info(f"test_data:{test_data.shape}")
     log.info(f"test_label:{test_label.shape}")
     log.info("----------------------------数据信息 END--------------------------")
 
@@ -99,8 +99,8 @@ if __name__ == '__main__':
 
     # 需要测试的模型
     # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF', 'BERTBILSTMCRF']
-    # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF']
-    train_modes = ['IDCNNCRF', 'IDCNNCRF2']
+    train_modes = ['BILSTMAttentionCRF', 'BILSTMCRF']
+    # train_modes = ['IDCNNCRF', 'IDCNNCRF2']
 
     # 定义文件路径（以便记录数据）
     log_path = os.path.join(path_log_dir, 'train_log.log')
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'test_loss', 'test_acc']
     df = pd.DataFrame(columns=columns)
     for model in train_modes:
-        info_list = train_sample(train_model=model, epochs=100, log=log)
+        info_list = train_sample(train_model=model, epochs=60, log=log)
         for info in info_list:      
             df = df.append([info])
         df.to_csv(df_path)
