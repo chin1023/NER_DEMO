@@ -21,7 +21,7 @@ def get_w2i(vocab_path = path_vocab):
                 w2i[text] = len(w2i) + 1
     return w2i
 
-
+'''
 # 获取 tag to index 词典
 def get_tag2index():
     return {'O':0,
@@ -43,6 +43,39 @@ def get_tag2index():
             'TREATMENT-I': 16,    #處置方式-以後
             'BODY-B': 17,         #器官部位-開頭
             'BODY-I': 18          #器官部位-以後
+            }
+'''
+
+
+def get_tag2index():
+    return {'O':0,
+            'ADMISSIONDATE-B': 1,      #住院日期-開頭
+            'ADMISSIONDATE-I': 2,      #住院日期-中間
+            'ADMISSIONDATE-E': 3,      #住院日期-結尾
+            'DISCHARGEDATE-B': 4,      #出院日期-開頭
+            'DISCHARGEDATE-I': 5,      #出院日期-中間
+            'DISCHARGEDATE-E': 6,      #出院日期-結尾
+            'SURGERYDATE-B': 7,        #手術日期-開頭
+            'SURGERYDATE-I': 8,        #手術日期-中間
+            'SURGERYDATE-E': 9,        #手術日期-結尾
+            'OUTPATIENTDATE-B': 10,    #門診日期-開頭
+            'OUTPATIENTDATE-I': 11,    #門診日期-中間
+            'OUTPATIENTDATE-E': 12,    #門診日期-結尾
+            'CHEMOTHERAPYDATE-B': 13,  #化療日期-開頭
+            'CHEMOTHERAPYDATE-I': 14,  #化療日期-中間
+            'CHEMOTHERAPYDATE-E': 15,  #化療日期-結尾
+            'RADIOTHERAPYDATE-B': 16,  #放療日期-開頭
+            'RADIOTHERAPYDATE-I': 17,  #放療日期-中間
+            'RADIOTHERAPYDATE-E': 18,  #放療日期-結尾
+            'DISEASE-B': 19,      #疾病症狀-開頭
+            'DISEASE-I': 20,      #疾病症狀-中間
+            'DISEASE-E': 21,      #疾病症狀-結尾
+            'TREATMENT-B': 22,    #處置方式-開頭
+            'TREATMENT-I': 23,    #處置方式-中間
+            'TREATMENT-E': 24,    #處置方式-結尾
+            'BODY-B': 25,         #器官部位-開頭
+            'BODY-I': 26,         #器官部位-中間
+            'BODY-E': 27          #器官部位-結尾
             }
 
 

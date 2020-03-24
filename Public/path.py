@@ -6,12 +6,13 @@ current_dir = os.path.dirname(os.path.abspath(__file__))  # 获取当前地址
 path_vocab = os.path.join(current_dir, '../data/vocab/vocab.txt')
 
 # 实体命名识别文件目录
-path_data_dir = os.path.join(current_dir, '../data/data/')
-path_data2_dir = os.path.join(current_dir, '../data/data2/')
+# path_data_dir = os.path.join(current_dir, '../data/data/')
+# path_data2_dir = os.path.join(current_dir, '../data/data2/')
 path_msra_dir = os.path.join(current_dir, '../data/MSRA/')
-path_renmin_dir = os.path.join(current_dir, '../data/renMinRiBao/')
+# path_renmin_dir = os.path.join(current_dir, '../data/renMinRiBao/')
 path_data300_dir = os.path.join(current_dir, '../data/data300/')
 path_data600_dir = os.path.join(current_dir, '../data/data600/')
+path_data300_bioes_dir = os.path.join(current_dir, '../data/data300_bioes/')
 
 # save model
 path_model = os.path.join(current_dir, '../Model/savemodel/')
