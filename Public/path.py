@@ -2,8 +2,9 @@ import os
 
 current_dir = os.path.dirname(os.path.abspath(__file__))  # 获取当前地址
 
-# 词表目录(本词表采用的是 bert预训练模型的词表)
-path_vocab = os.path.join(current_dir, '../data/vocab/vocab.txt')
+# 词表目录
+path_bert_vocab = os.path.join(current_dir, '../data/vocab/vocab.txt')  # bert预训练模型的词表
+path_vocab = os.path.join(current_dir, '../data/vocab/char_vocabs_zh.txt')
 
 # 实体命名识别文件目录
 # path_data_dir = os.path.join(current_dir, '../data/data/')
