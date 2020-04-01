@@ -8,7 +8,20 @@ cls_flag = '[CLS]'
 sep_flag = '[SEP]'
 
 
-# 获取 word to index 词典
+# 获取一般词典
+def get_w2i(vocab_path = path_vocab):
+    special_words = ['<PAD>', '<UNK>']
+    with open(vocab_path, "r", encoding="utf-8") as f:
+      char_vocabs = [line.strip() for line in f]
+    char_vocabs = special_words + char_vocabs
+    char_vocabs = sorted(set(char_vocabs), key = char_vocabs.index)
+    i2w = {idx: char for idx, char in enumerate(char_vocabs)}
+    w2i = {char: idx for idx, char in i2w.items()}
+    return w2i
+
+
+'''
+# 获取 bert 词典
 def get_w2i(vocab_path = path_vocab):
     w2i = {}
     with open(vocab_path, 'r') as f:
@@ -20,8 +33,9 @@ def get_w2i(vocab_path = path_vocab):
             if text and len(text) > 0:
                 w2i[text] = len(w2i) + 1
     return w2i
-
 '''
+
+
 # 获取 tag to index 词典
 def get_tag2index():
     return {'O':0,
@@ -44,9 +58,9 @@ def get_tag2index():
             'BODY-B': 17,         #器官部位-開頭
             'BODY-I': 18          #器官部位-以後
             }
+
+
 '''
-
-
 def get_tag2index():
     return {'O':0,
             'ADMISSIONDATE-B': 1,      #住院日期-開頭
@@ -77,6 +91,7 @@ def get_tag2index():
             'BODY-I': 26,         #器官部位-中間
             'BODY-E': 27          #器官部位-結尾
             }
+'''
 
 
 if __name__ == '__main__':

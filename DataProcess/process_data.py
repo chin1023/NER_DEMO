@@ -2,10 +2,7 @@ from DataProcess.vocab import *
 from Public.path import path_msra_dir, path_data300_dir, path_data600_dir, path_data300_bioes_dir
 import numpy as np
 import os
-
-# from DataProcess.data2_preprocessing import data2_preprocessing
 from DataProcess.msra_preprocessing import msra_preprocessing
-# from DataProcess.renminribao_preprocessing import renminribao_preprocessing
 
 
 class DataProcess(object):
@@ -32,8 +29,6 @@ class DataProcess(object):
         self.pad_index = self.w2i.get(pad_flag, 1)
         self.cls_index = self.w2i.get(cls_flag, 102)
         self.sep_index = self.w2i.get(sep_flag, 103)
-
-        print('self.tag_size', self.tag_size)
 
         if data_type == 'data300':
             self.base_dir = path_data300_dir
@@ -99,7 +94,7 @@ class DataProcess(object):
                 # print('line', line)
                 if line != '\n':
                     w, t = line.split()
-                    char_index = self.w2i.get(w, self.w2i[self.unk_flag])
+                    char_index = self.w2i.get(w, self.w2i['<UNK>'])
                     tag_index = self.tag2index.get(t, 0)
                     # print('tag_index', tag_index)
                     line_data.append(char_index)
@@ -107,7 +102,7 @@ class DataProcess(object):
                 else:
                     if len(line_data) < self.max_len:
                         pad_num = self.max_len - len(line_data)
-                        line_data = [self.pad_index]*pad_num + line_data
+                        line_data = [0]*pad_num + line_data
                         line_label = [0]*pad_num + line_label
                     else:
                         line_data = line_data[:self.max_len]

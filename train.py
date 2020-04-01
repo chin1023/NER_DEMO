@@ -27,7 +27,7 @@ def train_sample(train_model='IDCNNCRF2',
     if train_model == 'BERTBILSTMCRF':
         dp = DataProcess(data_type='msra', max_len=max_len, model='bert')
     else:
-        dp = DataProcess(data_type='data300_bioes', max_len=max_len)
+        dp = DataProcess(data_type='data300', max_len=max_len)
     train_data, train_label, test_data, test_label = dp.get_data(one_hot=True)
 
     log.info("----------------------------数据信息 START--------------------------")
@@ -61,8 +61,8 @@ def train_sample(train_model='IDCNNCRF2',
     print(model.metrics_names)
     print(score)
 
-    # # save model
-    # model.save(os.path.join(path_model, 'IDCNN2.h5'))
+    # save model
+    # model.save(os.path.join(path_model, 'IDCNN_0401.h5'))
 
     # 计算 f1 和 recall值
     pre = model.predict(test_data)
@@ -70,10 +70,8 @@ def train_sample(train_model='IDCNNCRF2',
     test_label = np.array(test_label)
     pre = np.argmax(pre, axis=2)
     test_label = np.argmax(test_label, axis=2)
-    # print('test_label', test_label)
     pre = pre.reshape(pre.shape[0] * pre.shape[1], )
     test_label = test_label.reshape(test_label.shape[0] * test_label.shape[1], )
-    # print('test_label', test_label)
 
 
     f1score = f1_score(pre, test_label, average='macro')
@@ -99,8 +97,9 @@ if __name__ == '__main__':
 
     # 需要测试的模型
     # train_modes = ['IDCNNCRF', 'IDCNNCRF2', 'BILSTMAttentionCRF', 'BILSTMCRF', 'BERTBILSTMCRF']
-    train_modes = ['BILSTMAttentionCRF', 'BILSTMCRF']
+    # train_modes = ['BILSTMAttentionCRF', 'BILSTMCRF']
     # train_modes = ['IDCNNCRF', 'IDCNNCRF2']
+    train_modes = ['IDCNNCRF']
 
     # 定义文件路径（以便记录数据）
     log_path = os.path.join(path_log_dir, 'train_log.log')
@@ -111,7 +110,7 @@ if __name__ == '__main__':
     columns = ['model_name','epoch', 'loss', 'acc', 'val_loss', 'val_acc', 'test_loss', 'test_acc']
     df = pd.DataFrame(columns=columns)
     for model in train_modes:
-        info_list = train_sample(train_model=model, epochs=60, log=log)
+        info_list = train_sample(train_model=model, epochs=100, log=log)
         for info in info_list:      
             df = df.append([info])
         df.to_csv(df_path)
