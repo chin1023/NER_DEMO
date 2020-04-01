@@ -7,10 +7,7 @@ path_bert_vocab = os.path.join(current_dir, '../data/vocab/vocab.txt')  # bert�
 path_vocab = os.path.join(current_dir, '../data/vocab/char_vocabs_zh.txt')
 
 # 实体命名识别文件目录
-# path_data_dir = os.path.join(current_dir, '../data/data/')
-# path_data2_dir = os.path.join(current_dir, '../data/data2/')
 path_msra_dir = os.path.join(current_dir, '../data/MSRA/')
-# path_renmin_dir = os.path.join(current_dir, '../data/renMinRiBao/')
 path_data300_dir = os.path.join(current_dir, '../data/data300/')
 path_data600_dir = os.path.join(current_dir, '../data/data600/')
 path_data300_bioes_dir = os.path.join(current_dir, '../data/data300_bioes/')
